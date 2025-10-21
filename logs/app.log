@@ -1,0 +1,88 @@
+2025-10-21 17:12:01 [INFO] c.e.f.App - === Flight Fare Optimizer iniciado ===
+2025-10-21 17:12:10 [INFO] c.e.f.App - Cargando vuelos desde URL: https://raw.githubusercontent.com/KevPrieto/flight-data/refs/heads/main/sample-flights.json
+2025-10-21 17:12:10 [INFO] c.e.f.a.RemoteJsonClient - Descargando vuelos desde la URL remota: https://raw.githubusercontent.com/KevPrieto/flight-data/refs/heads/main/sample-flights.json
+2025-10-21 17:12:25 [ERROR] c.e.f.App - Error inesperado: 
+java.time.format.DateTimeParseException: Text '2011-25-10' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 25
+	at java.base/java.time.format.DateTimeFormatter.createError(DateTimeFormatter.java:2023)
+	at java.base/java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1958)
+	at java.base/java.time.LocalDate.parse(LocalDate.java:430)
+	at java.base/java.time.LocalDate.parse(LocalDate.java:415)
+	at com.edo.fares.App.main(App.java:67)
+	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
+	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
+	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.time.DateTimeException: Invalid value for MonthOfYear (valid values 1 - 12): 25
+	at java.base/java.time.temporal.ValueRange.checkValidIntValue(ValueRange.java:338)
+	at java.base/java.time.temporal.ChronoField.checkValidIntValue(ChronoField.java:737)
+	at java.base/java.time.chrono.IsoChronology.resolveYMD(IsoChronology.java:644)
+	at java.base/java.time.chrono.IsoChronology.resolveYMD(IsoChronology.java:126)
+	at java.base/java.time.chrono.AbstractChronology.resolveDate(AbstractChronology.java:442)
+	at java.base/java.time.chrono.IsoChronology.resolveDate(IsoChronology.java:586)
+	at java.base/java.time.chrono.IsoChronology.resolveDate(IsoChronology.java:126)
+	at java.base/java.time.format.Parsed.resolveDateFields(Parsed.java:366)
+	at java.base/java.time.format.Parsed.resolveFields(Parsed.java:272)
+	at java.base/java.time.format.Parsed.resolve(Parsed.java:259)
+	at java.base/java.time.format.DateTimeParseContext.toResolved(DateTimeParseContext.java:331)
+	at java.base/java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2058)
+	at java.base/java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1954)
+	... 7 common frames omitted
+2025-10-21 17:12:25 [INFO] c.e.f.App - Finalizando ejecución del programa.
+2025-10-21 17:16:16 [INFO] c.e.f.App - === Flight Fare Optimizer iniciado ===
+2025-10-21 17:16:21 [INFO] c.e.f.App - Cargando vuelos desde archivo local...
+2025-10-21 17:16:36 [WARN] c.e.f.App - Formato de fecha inválido: 2027-109-332
+2025-10-21 17:16:36 [INFO] c.e.f.App - Finalizando ejecución del programa.
+2025-10-21 17:28:46 [INFO] c.e.f.App - === Flight Fare Optimizer started ===
+2025-10-21 17:49:28 [INFO] c.e.f.App - === Flight Fare Optimizer started ===
+2025-10-21 17:49:36 [INFO] c.e.f.App - Loading flights from URL: https://raw.githubusercontent.com/KevPrieto/flight-data/refs/heads/main/sample-flights.json
+2025-10-21 17:49:36 [INFO] c.e.f.a.RemoteJsonClient - Descargando vuelos desde la URL remota: https://raw.githubusercontent.com/KevPrieto/flight-data/refs/heads/main/sample-flights.json
+2025-10-21 17:49:59 [INFO] c.e.f.r.ReportGenerator - Report successfully saved at target/reports/flight_report_20251021_174959.txt
+2025-10-21 17:49:59 [INFO] c.e.f.App - Program finished.
+2025-10-21 18:11:10 [INFO] c.e.f.a.LocalJsonClient - Loading flight data from local file: sample-flights.json
+2025-10-21 18:11:11 [ERROR] c.e.f.a.LocalJsonClient - Failed to read local file: sample-flights.json
+2025-10-21 18:11:34 [INFO] c.e.f.a.LocalJsonClient - Loading flight data from local file: sample-flights.json
+2025-10-21 18:11:34 [ERROR] c.e.f.a.LocalJsonClient - Failed to read local file: sample-flights.json
+2025-10-21 18:11:39 [INFO] c.e.f.a.LocalJsonClient - Loading flight data from local file: sample-flights.json
+2025-10-21 18:11:39 [ERROR] c.e.f.a.LocalJsonClient - Failed to read local file: sample-flights.json
+2025-10-21 18:51:11 [INFO] c.e.f.a.LocalJsonClient - Loading flight data from local file: sample-flights.json
+2025-10-21 18:51:11 [ERROR] c.e.f.a.LocalJsonClient - Failed to read local file: sample-flights.json
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "flightNumber" (class com.edo.fares.model.Flight), not marked as ignorable (6 known properties: "origin", "price", "code", "airline", "destination", "date"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 2, column: 20] (through reference chain: java.util.ArrayList[0]->com.edo.fares.model.Flight["flightNumber"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1793)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1771)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:316)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:361)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4905)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3893)
+	at com.edo.fares.api.LocalJsonClient.loadFlights(LocalJsonClient.java:39)
+	at com.edo.fares.gui.FlightSearchController.initialize(FlightSearchController.java:63)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at jdk.internal.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at com.edo.fares.gui.MainApp.start(MainApp.java:18)
+	at javafx.graphics@21/com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$9(LauncherImpl.java:839)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runAndWait$12(PlatformImpl.java:483)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:840)

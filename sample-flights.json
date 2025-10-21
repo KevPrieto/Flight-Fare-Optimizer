@@ -1,6 +1,0 @@
-[
-  {"flightNumber":"UX1023","airline":"Air Europa","origin":"MAD","destination":"BCN","date":"2025-11-15","price":49.99},
-  {"flightNumber":"IB2710","airline":"Iberia","origin":"MAD","destination":"BCN","date":"2025-11-15","price":59.00},
-  {"flightNumber":"VY101","airline":"Vueling","origin":"MAD","destination":"BCN","date":"2025-11-15","price":44.50},
-  {"flightNumber":"VY540","airline":"Vueling","origin":"MAD","destination":"PMI","date":"2025-11-15","price":39.99}
-]
