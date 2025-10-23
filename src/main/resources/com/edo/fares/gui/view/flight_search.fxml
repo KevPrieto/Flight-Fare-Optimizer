@@ -1,48 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.cell.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.edo.fares.gui.FlightSearchController"
-      spacing="12">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.edo.fares.gui.FlightSearchController"
+            stylesheets="@style.css"
+            prefWidth="950" prefHeight="600">
 
-    <!-- Padding -->
-    <padding>
-        <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
-    </padding>
+    <VBox spacing="18" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15"
+          AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">
 
-    <!-- Title -->
-    <Label text="Flight Fare Optimizer" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <!-- TITLE -->
+        <Label text="Flight Fare Optimizer" styleClass="title-label"/>
 
-    <!-- Search bar -->
-    <HBox spacing="8">
-        <TextField fx:id="txtOrigin" promptText="Origin (e.g. MAD)" maxWidth="120"/>
-        <TextField fx:id="txtDestination" promptText="Destination (e.g. BCN)" maxWidth="140"/>
-        <DatePicker fx:id="dpDate" promptText="YYYY-MM-DD"/>
-        <Button text="Search" onAction="#handleSearch"/>
-    </HBox>
+        <!-- SEARCH PANEL -->
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
 
-    <!-- Table of flights -->
-    <TableView fx:id="tblFlights" prefHeight="380">
-        <columns>
-            <TableColumn fx:id="colCode" text="Code" prefWidth="90"/>
-            <TableColumn fx:id="colAirline" text="Airline" prefWidth="140"/>
-            <TableColumn fx:id="colOrigin" text="Origin" prefWidth="90"/>
-            <TableColumn fx:id="colDestination" text="Destination" prefWidth="110"/>
-            <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
-            <TableColumn fx:id="colPrice" text="Price (€)" prefWidth="100"/>
-        </columns>
-    </TableView>
+            <Label text="Origin:" minWidth="60"/>
+            <TextField fx:id="txtOrigin" promptText="e.g. MAD" prefWidth="100"/>
 
-    <!-- Status + Exit -->
-    <HBox spacing="8" alignment="CENTER_LEFT">
-        <Label fx:id="lblStatus" text="Ready." />
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Exit" onAction="#closeApp"/>
-    </HBox>
+            <Label text="Destination:" minWidth="85"/>
+            <TextField fx:id="txtDestination" promptText="e.g. BCN" prefWidth="100"/>
 
-</VBox>
+            <Label text="Date:" minWidth="45"/>
+            <DatePicker fx:id="dpDate" prefWidth="140"/>
+
+            <!-- Use Region as flexible spacer -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="btnSearch" text="Search"
+                    onAction="#handleSearch"
+                    prefWidth="100" styleClass="action-button"/>
+
+            <Button fx:id="btnExport" text="Export to PDF"
+                    onAction="#handleExport"
+                    prefWidth="140" styleClass="action-button"/>
+
+            <Button fx:id="btnClose" text="Close"
+                    onAction="#closeApp"
+                    prefWidth="90" styleClass="action-button"/>
+        </HBox>
+
+        <!-- TABLE -->
+        <TableView fx:id="tblFlights" prefHeight="450">
+            <columns>
+                <TableColumn fx:id="colCode" text="Code" prefWidth="100"/>
+                <TableColumn fx:id="colAirline" text="Airline" prefWidth="150"/>
+                <TableColumn fx:id="colOrigin" text="Origin" prefWidth="100"/>
+                <TableColumn fx:id="colDestination" text="Destination" prefWidth="100"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="150"/>
+                <TableColumn fx:id="colPrice" text="Price (€)" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <!-- STATUS LABEL -->
+        <Label fx:id="lblStatus" text="Ready." maxWidth="Infinity"/>
+    </VBox>
+
+</AnchorPane>

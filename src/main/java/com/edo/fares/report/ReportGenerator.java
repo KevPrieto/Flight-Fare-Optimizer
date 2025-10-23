@@ -1,61 +1,73 @@
 package com.edo.fares.report;
 
 import com.edo.fares.model.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import javafx.collections.ObservableList;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.nio.file.Paths;
 
 public class ReportGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReportGenerator.class);
+    private static final String FONT_PATH = "src/main/resources/fonts/DejaVuSans.ttf";
 
-    /**
-     * Generates a text report with the filtered flights and cheapest flight.
-     *
-     * @param flights List of flights matching search criteria
-     * @param cheapest The cheapest flight found
-     */
-    public void generateReport(List<Flight> flights, Flight cheapest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-        String timestamp = LocalDateTime.now().format(formatter);
-        String reportDirPath = "target/reports";
-        String reportPath = reportDirPath + "/flight_report_" + timestamp + ".txt";
-
-        try {
-            File reportDir = new File(reportDirPath);
-            if (!reportDir.exists()) {
-                boolean created = reportDir.mkdirs();
-                if (!created) {
-                    logger.warn("Could not create reports directory at {}", reportDirPath);
-                }
-            }
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportPath))) {
-                writer.write("=== FLIGHT FARE OPTIMIZER REPORT ===\n");
-                writer.write("Generated at: " + LocalDateTime.now() + "\n\n");
-
-                writer.write(">> FILTERED FLIGHTS (" + flights.size() + " found):\n");
-                for (Flight flight : flights) {
-                    writer.write(flight.toString() + "\n");
-                }
-
-                writer.write("\n>> CHEAPEST FLIGHT:\n");
-                writer.write(cheapest.toString() + "\n");
-
-                logger.info("Report successfully saved at {}", reportPath);
-                System.out.println("\n📄 Report saved successfully at: " + reportPath);
-            }
-
-        } catch (IOException e) {
-            logger.error("Error writing report: {}", e.getMessage());
-            System.out.println("⚠️  Could not save report. Check logs for details.");
+    public void generatePdfReport(ObservableList<Flight> flights, String filePath) throws IOException, DocumentException {
+        if (flights == null || flights.isEmpty()) {
+            throw new IllegalArgumentException("No flight data to export.");
         }
+
+        Document document = new Document(PageSize.A4, 36, 36, 54, 36);
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        document.open();
+
+        // Load Unicode font
+        BaseFont unicodeFont = BaseFont.createFont(
+                Paths.get(FONT_PATH).toAbsolutePath().toString(),
+                BaseFont.IDENTITY_H,
+                BaseFont.EMBEDDED
+        );
+        Font titleFont = new Font(unicodeFont, 16, Font.BOLD);
+        Font headerFont = new Font(unicodeFont, 12, Font.BOLD, BaseColor.WHITE);
+        Font cellFont = new Font(unicodeFont, 11, Font.NORMAL);
+
+        // Title
+        Paragraph title = new Paragraph("Flight Fare Report", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        // Table
+        PdfPTable table = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{2f, 3f, 2f, 2f, 2f, 2f});
+
+        addHeaderCell(table, "Code", headerFont);
+        addHeaderCell(table, "Airline", headerFont);
+        addHeaderCell(table, "Origin", headerFont);
+        addHeaderCell(table, "Destination", headerFont);
+        addHeaderCell(table, "Date", headerFont);
+        addHeaderCell(table, "Price (€)", headerFont);
+
+        for (Flight f : flights) {
+            table.addCell(new PdfPCell(new Phrase(f.getCode(), cellFont)));
+            table.addCell(new PdfPCell(new Phrase(f.getAirline(), cellFont)));
+            table.addCell(new PdfPCell(new Phrase(f.getOrigin(), cellFont)));
+            table.addCell(new PdfPCell(new Phrase(f.getDestination(), cellFont)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(f.getDate()), cellFont)));
+            table.addCell(new PdfPCell(new Phrase(String.format("%.2f", f.getPrice()), cellFont)));
+        }
+
+        document.add(table);
+        document.close();
+    }
+
+    private void addHeaderCell(PdfPTable table, String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBackgroundColor(new BaseColor(0, 102, 204)); // Azul profesional
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(6f);
+        table.addCell(cell);
     }
 }
