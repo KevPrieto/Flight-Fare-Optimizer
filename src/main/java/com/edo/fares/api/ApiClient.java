@@ -4,6 +4,8 @@ import com.edo.fares.model.Flight;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 
 import java.io.IOException;
 import java.net.URI;

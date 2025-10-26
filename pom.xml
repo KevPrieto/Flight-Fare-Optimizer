@@ -1,122 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.edo.fares</groupId>
   <artifactId>flight-fare-optimizer</artifactId>
   <version>1.0.0</version>
+  <packaging>jar</packaging>
   <name>Flight Fare Optimizer</name>
-  <description>Console Java app to filter and find cheapest flights</description>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <!-- Unificar versiones de Jackson -->
-    <jackson.version>2.17.2</jackson.version>
-
-    <junit.jupiter.version>5.10.2</junit.jupiter.version>
+    <main.class>com.edo.fares.gui.Launcher</main.class>
+    <javafx.sdk.path>C:\javafx-sdk-17\lib</javafx.sdk.path>
   </properties>
 
   <dependencies>
-    <!-- Jackson core for JSON -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-
-    <!-- Jackson module for Java time -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-
-    <!-- JUnit 5 for tests -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${junit.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Logging: SLF4J + Logback -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>2.0.9</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.4.11</version>
-    </dependency>
-
-    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>21</version>
+      <version>17.0.12</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>21</version>
+      <version>17.0.12</version>
     </dependency>
-
     <dependency>
-      <groupId>org.apache.pdfbox</groupId>
-      <artifactId>pdfbox</artifactId>
-      <version>2.0.30</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.17.0</version>
     </dependency>
-
-    <!-- iTextPDF para generar PDFs (lo usa ReportGenerator) -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.17.0</version>
+    </dependency>
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
       <version>5.5.13.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.12</version>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Ejecutar app de consola si lo necesitas -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.3.0</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
         <configuration>
-          <mainClass>com.edo.fares.App</mainClass>
+          <release>17</release>
         </configuration>
       </plugin>
 
-      <!-- Tests -->
-    <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.5</version>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.6.0</version>
         <configuration>
-          <useModulePath>false</useModulePath>
+          <archive>
+            <manifest>
+              <mainClass>${main.class}</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
         </configuration>
-    </plugin>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
 
-      <!-- JavaFX run -->
-    <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
-        <configuration>
-          <mainClass>com.edo.fares.gui.MainApp</mainClass>
-        </configuration>
-    </plugin>
-    
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>create-runtime</id>
+            <phase>package</phase>
+            <goals><goal>exec</goal></goals>
+            <configuration>
+              <executable>${java.home}\bin\jlink.exe</executable>
+              <commandlineArgs>
+                --module-path "${javafx.sdk.path};${java.home}\jmods"
+                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,java.sql
+                --output target/runtime
+                --strip-debug
+                --no-header-files
+                --no-man-pages
+              </commandlineArgs>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>create-installer</id>
+            <phase>install</phase>
+            <goals><goal>exec</goal></goals>
+            <configuration>
+              <executable>${java.home}\bin\jpackage.exe</executable>
+              <commandlineArgs>
+                --name "Flight Fare Optimizer"
+                --input target
+                --main-jar flight-fare-optimizer-1.0.0-jar-with-dependencies.jar
+                --main-class ${main.class}
+                --type exe
+                --dest target\installer
+                --runtime-image target/runtime
+                --icon src\main\resources\icon.ico
+                --win-dir-chooser
+                --win-menu
+                --win-menu-group "Flight Fare Optimizer"
+                --win-shortcut
+              </commandlineArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-
   </build>
 </project>

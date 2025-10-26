@@ -1,0 +1,12 @@
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\api\ApiClient.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\api\LocalJsonClient.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\api\RemoteJsonClient.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\App.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\exception\DataLoadException.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\gui\FlightSearchController.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\gui\Launcher.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\gui\MainApp.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\model\Flight.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\model\SearchCriteria.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\report\ReportGenerator.java
+C:\Users\kevpr\Desktop\flight-fare-optimizer\src\main\java\com\edo\fares\service\FareService.java
