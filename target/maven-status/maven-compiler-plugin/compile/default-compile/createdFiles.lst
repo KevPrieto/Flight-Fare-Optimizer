@@ -6,7 +6,6 @@ com\edo\fares\gui\FlightSearchController.class
 com\edo\fares\model\SearchCriteria.class
 com\edo\fares\api\ApiClient$1.class
 com\edo\fares\api\RemoteJsonClient.class
-com\edo\fares\api\LocalJsonClient$2.class
 com\edo\fares\App.class
 com\edo\fares\api\LocalJsonClient.class
 com\edo\fares\report\ReportGenerator.class

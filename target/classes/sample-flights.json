@@ -1,26 +1,17 @@
 [
-  {
-    "flightNumber": "IB123",
-    "airline": "Iberia",
-    "origin": "MAD",
-    "destination": "BCN",
-    "date": "2025-11-15",
-    "price": 49.99
-  },
-  {
-    "flightNumber": "VY456",
-    "airline": "Vueling",
-    "origin": "MAD",
-    "destination": "BCN",
-    "date": "2025-11-15",
-    "price": 59.00
-  },
-  {
-    "flightNumber": "UX789",
-    "airline": "Air Europa",
-    "origin": "MAD",
-    "destination": "LIS",
-    "date": "2025-11-15",
-    "price": 72.40
-  }
+  { "code": "IB101", "airline": "Iberia", "origin": "MAD", "destination": "BCN", "date": "2025-10-28", "price": 89.99 },
+  { "code": "IB102", "airline": "Iberia", "origin": "BCN", "destination": "MAD", "date": "2025-10-28", "price": 92.50 },
+  { "code": "VY201", "airline": "Vueling", "origin": "MAD", "destination": "LIS", "date": "2025-10-28", "price": 120.30 },
+  { "code": "VY202", "airline": "Vueling", "origin": "LIS", "destination": "MAD", "date": "2025-10-28", "price": 115.10 },
+  { "code": "UX301", "airline": "Air Europa", "origin": "MAD", "destination": "CDG", "date": "2025-10-28", "price": 135.75 },
+  { "code": "UX302", "airline": "Air Europa", "origin": "CDG", "destination": "MAD", "date": "2025-10-28", "price": 132.40 },
+  { "code": "RY401", "airline": "Ryanair", "origin": "BCN", "destination": "FCO", "date": "2025-10-29", "price": 49.99 },
+  { "code": "RY402", "airline": "Ryanair", "origin": "FCO", "destination": "BCN", "date": "2025-10-29", "price": 55.10 },
+  { "code": "EZ501", "airline": "EasyJet", "origin": "LIS", "destination": "AMS", "date": "2025-10-30", "price": 89.40 },
+  { "code": "EZ502", "airline": "EasyJet", "origin": "AMS", "destination": "LIS", "date": "2025-10-30", "price": 94.70 },
+  { "code": "KL601", "airline": "KLM", "origin": "AMS", "destination": "MAD", "date": "2025-10-31", "price": 145.20 },
+  { "code": "KL602", "airline": "KLM", "origin": "MAD", "destination": "AMS", "date": "2025-10-31", "price": 140.80 },
+  { "code": "LH701", "airline": "Lufthansa", "origin": "FRA", "destination": "MAD", "date": "2025-10-31", "price": 162.00 },
+  { "code": "LH702", "airline": "Lufthansa", "origin": "MAD", "destination": "FRA", "date": "2025-10-31", "price": 158.50 },
+  { "code": "TP801", "airline": "TAP Air Portugal", "origin": "LIS", "destination": "BCN", "date": "2025-11-01", "price": 78.90 }
 ]

@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.edo.fares</groupId>
@@ -10,14 +11,26 @@
   <packaging>jar</packaging>
   <name>Flight Fare Optimizer</name>
 
+  <!-- ============================= -->
+  <!-- ✅ PROPIEDADES DEL PROYECTO -->
+  <!-- ============================= -->
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <main.class>com.edo.fares.gui.Launcher</main.class>
-    <javafx.sdk.path>C:\javafx-sdk-17\lib</javafx.sdk.path>
+
+    <!-- Versión compatible con Windows Installer -->
+    <!-- Formato: 1.0.YY.MMDD -->
+    <maven.build.timestamp.format>yy.MMdd</maven.build.timestamp.format>
+    <build.date>${maven.build.timestamp}</build.date>
+    <app.version>1.0.${build.date}</app.version>
   </properties>
 
+  <!-- ============================= -->
+  <!-- ✅ DEPENDENCIAS -->
+  <!-- ============================= -->
   <dependencies>
+    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -28,6 +41,8 @@
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.12</version>
     </dependency>
+
+    <!-- JSON -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
@@ -38,20 +53,55 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>2.17.0</version>
     </dependency>
+
+    <!-- PDF -->
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
       <version>5.5.13.3</version>
     </dependency>
+
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>2.0.12</version>
     </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
+  <!-- ============================= -->
+  <!-- ✅ BUILD CONFIG -->
+  <!-- ============================= -->
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.json</include>
+          <include>**/*.fxml</include>
+          <include>**/*.css</include>
+          <include>**/*.ico</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
+
+      <!-- Compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -61,6 +111,7 @@
         </configuration>
       </plugin>
 
+      <!-- Build jar-with-dependencies -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -68,7 +119,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>${main.class}</mainClass>
+              <mainClass>com.edo.fares.gui.Launcher</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -84,28 +135,30 @@
         </executions>
       </plugin>
 
+      <!-- ============================= -->
+      <!-- ✅ Exec Maven Plugin + jpackage -->
+      <!-- ============================= -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
         <executions>
+
+          <!-- Limpia instalador previo -->
           <execution>
-            <id>create-runtime</id>
-            <phase>package</phase>
+            <id>clean-installer</id>
+            <phase>generate-resources</phase>
             <goals><goal>exec</goal></goals>
             <configuration>
-              <executable>${java.home}\bin\jlink.exe</executable>
-              <commandlineArgs>
-                --module-path "${javafx.sdk.path};${java.home}\jmods"
-                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,java.sql
-                --output target/runtime
-                --strip-debug
-                --no-header-files
-                --no-man-pages
-              </commandlineArgs>
+              <executable>cmd</executable>
+              <arguments>
+                <argument>/c</argument>
+                <argument>if exist target\installer rmdir /s /q target\installer</argument>
+              </arguments>
             </configuration>
           </execution>
 
+          <!-- Crea el instalador EXE -->
           <execution>
             <id>create-installer</id>
             <phase>install</phase>
@@ -116,20 +169,23 @@
                 --name "Flight Fare Optimizer"
                 --input target
                 --main-jar flight-fare-optimizer-1.0.0-jar-with-dependencies.jar
-                --main-class ${main.class}
+                --main-class com.edo.fares.gui.Launcher
                 --type exe
-                --dest target\installer
-                --runtime-image target/runtime
-                --icon src\main\resources\icon.ico
+                --dest target/installer
+                --icon src/main/resources/icon.ico
+                --app-version ${app.version}
                 --win-dir-chooser
                 --win-menu
-                --win-menu-group "Flight Fare Optimizer"
                 --win-shortcut
+                --java-options "--module-path C:\javafx-sdk-17.0.12\lib"
+                --java-options "--add-modules javafx.controls,javafx.fxml"
               </commandlineArgs>
             </configuration>
           </execution>
+
         </executions>
       </plugin>
     </plugins>
   </build>
+
 </project>

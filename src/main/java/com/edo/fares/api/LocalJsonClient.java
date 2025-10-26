@@ -5,48 +5,39 @@ import com.edo.fares.model.Flight;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Loads flight data from embedded JSON inside the JAR/EXE.
+ * Works in both development and production builds.
+ */
 public class LocalJsonClient {
 
     private static final Logger LOGGER = Logger.getLogger(LocalJsonClient.class.getName());
 
     public List<Flight> loadFlights(String resourcePath) throws DataLoadException {
-        LOGGER.info("Attempting to load flight data from resource: " + resourcePath);
+        LOGGER.info("Attempting to load flight data: " + resourcePath);
 
         ObjectMapper mapper = new ObjectMapper();
-        // ✅ Register support for LocalDate, LocalDateTime, etc.
         mapper.registerModule(new JavaTimeModule());
 
-        // Try classpath first
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
-            if (is != null) {
-                LOGGER.info("Loaded " + resourcePath + " from classpath successfully.");
-                return mapper.readValue(is, new TypeReference<List<Flight>>() {});
-            } else {
-                LOGGER.warning("Could not find resource on classpath: " + resourcePath);
+        try (InputStream is = getClass().getResourceAsStream("/" + resourcePath)) {
+            if (is == null) {
+                LOGGER.severe("Resource not found inside classpath: /" + resourcePath);
+                throw new DataLoadException("Could not load local JSON data (missing resource)");
             }
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Failed to load from classpath: " + resourcePath, e);
-        }
 
-        // Fallback: absolute path
-        try {
-            String fullPath = Paths.get("src", "main", "resources", resourcePath).toString();
-            LOGGER.info("Fallback: loading directly from " + fullPath);
-            byte[] bytes = Files.readAllBytes(Paths.get(fullPath));
-            return mapper.readValue(bytes, new TypeReference<List<Flight>>() {});
+            LOGGER.info("Successfully loaded " + resourcePath + " from classpath.");
+            return mapper.readValue(is, new TypeReference<List<Flight>>() {});
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Completely failed to load local data file: " + resourcePath, e);
+            LOGGER.log(Level.SEVERE, "Error reading JSON file: " + resourcePath, e);
             throw new DataLoadException("Could not load local JSON data", e);
         }
     }
 }
+
