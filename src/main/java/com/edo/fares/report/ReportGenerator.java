@@ -2,61 +2,64 @@ package com.edo.fares.report;
 
 import com.edo.fares.model.Flight;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import javafx.collections.ObservableList;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.util.List;
 
 public class ReportGenerator {
 
-    private static final String FONT_PATH = "src/main/resources/fonts/DejaVuSans.ttf";
-
-    public void generatePdfReport(ObservableList<Flight> flights, String filePath) throws IOException, DocumentException {
-        if (flights == null || flights.isEmpty()) {
-            throw new IllegalArgumentException("No flight data to export.");
-        }
-
-        Document document = new Document(PageSize.A4, 36, 36, 54, 36);
-        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+    public void generatePdfReport(List<Flight> flights, String outputPath) throws Exception {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, new FileOutputStream(outputPath));
         document.open();
 
-        // Load Unicode font
-        BaseFont unicodeFont = BaseFont.createFont(
-                Paths.get(FONT_PATH).toAbsolutePath().toString(),
-                BaseFont.IDENTITY_H,
-                BaseFont.EMBEDDED
-        );
-        Font titleFont = new Font(unicodeFont, 16, Font.BOLD);
-        Font headerFont = new Font(unicodeFont, 12, Font.BOLD, BaseColor.WHITE);
-        Font cellFont = new Font(unicodeFont, 11, Font.NORMAL);
+        // --- FONT FIX: Cargar fuente embebida o usar fallback estándar ---
+        BaseFont baseFont;
+        try (InputStream fontStream = getClass().getResourceAsStream("/fonts/DejaVuSans.ttf")) {
+            if (fontStream != null) {
+                byte[] fontBytes = fontStream.readAllBytes();
+                baseFont = BaseFont.createFont("DejaVuSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, fontBytes, null);
+            } else {
+                baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+            }
+        } catch (Exception e) {
+            baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+        }
 
-        // Title
+        Font titleFont = new Font(baseFont, 18, Font.BOLD);
+        Font tableHeaderFont = new Font(baseFont, 12, Font.BOLD);
+        Font tableCellFont = new Font(baseFont, 11);
+
+        // --- Título ---
         Paragraph title = new Paragraph("Flight Fare Report", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(20);
         document.add(title);
 
-        // Table
+        // --- Tabla de vuelos ---
         PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        table.setWidths(new float[]{2f, 3f, 2f, 2f, 2f, 2f});
+        table.setWidths(new int[]{2, 3, 2, 2, 3, 2});
 
-        addHeaderCell(table, "Code", headerFont);
-        addHeaderCell(table, "Airline", headerFont);
-        addHeaderCell(table, "Origin", headerFont);
-        addHeaderCell(table, "Destination", headerFont);
-        addHeaderCell(table, "Date", headerFont);
-        addHeaderCell(table, "Price (€)", headerFont);
+        addHeaderCell(table, "Code", tableHeaderFont);
+        addHeaderCell(table, "Airline", tableHeaderFont);
+        addHeaderCell(table, "Origin", tableHeaderFont);
+        addHeaderCell(table, "Destination", tableHeaderFont);
+        addHeaderCell(table, "Date", tableHeaderFont);
+        addHeaderCell(table, "Price (€)", tableHeaderFont);
 
         for (Flight f : flights) {
-            table.addCell(new PdfPCell(new Phrase(f.getCode(), cellFont)));
-            table.addCell(new PdfPCell(new Phrase(f.getAirline(), cellFont)));
-            table.addCell(new PdfPCell(new Phrase(f.getOrigin(), cellFont)));
-            table.addCell(new PdfPCell(new Phrase(f.getDestination(), cellFont)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(f.getDate()), cellFont)));
-            table.addCell(new PdfPCell(new Phrase(String.format("%.2f", f.getPrice()), cellFont)));
+            addCell(table, f.getCode(), tableCellFont);
+            addCell(table, f.getAirline(), tableCellFont);
+            addCell(table, f.getOrigin(), tableCellFont);
+            addCell(table, f.getDestination(), tableCellFont);
+            addCell(table, f.getDate().toString(), tableCellFont);
+            addCell(table, String.format("€%.2f", f.getPrice()), tableCellFont);
         }
 
         document.add(table);
@@ -65,9 +68,14 @@ public class ReportGenerator {
 
     private void addHeaderCell(PdfPTable table, String text, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
-        cell.setBackgroundColor(new BaseColor(0, 102, 204)); // Azul profesional
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setPadding(6f);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+    }
+
+    private void addCell(PdfPTable table, String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
     }
 }

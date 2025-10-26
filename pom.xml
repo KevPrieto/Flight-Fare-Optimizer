@@ -24,6 +24,7 @@
     <maven.build.timestamp.format>yy.MMdd</maven.build.timestamp.format>
     <build.date>${maven.build.timestamp}</build.date>
     <app.version>1.0.${build.date}</app.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <!-- ============================= -->

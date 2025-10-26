@@ -85,6 +85,15 @@ public class FlightSearchController {
         String destination = toUpper(txtDestination != null ? txtDestination.getText() : null);
         LocalDate date = dpDate != null ? dpDate.getValue() : null;
 
+        // ✅ Mostrar todo si no hay filtros
+        if ((origin == null || origin.isBlank()) &&
+            (destination == null || destination.isBlank()) &&
+            date == null) {
+            backingData.setAll(allFlights);
+            setStatus("Showing all " + allFlights.size() + " flights.");
+            return;
+        }
+
         SearchCriteria criteria = new SearchCriteria(origin, destination, date);
         List<Flight> filtered = fareService.filterFlights(allFlights, criteria);
         backingData.setAll(filtered);
@@ -107,7 +116,6 @@ public class FlightSearchController {
      */
     @FXML
     private void handleExport() {
-        // Alias hacia el exportador real
         handleExportPdf();
     }
 
@@ -123,18 +131,20 @@ public class FlightSearchController {
                 return;
             }
 
-            // Asegurar carpeta de salida
-            Path outDir = Path.of("reports");
+            // Crear carpeta en Documentos del usuario
+            String userDocs = System.getProperty("user.home") + "\\Documents\\FlightFareReports";
+            Path outDir = Path.of(userDocs);
             if (!Files.exists(outDir)) {
                 Files.createDirectories(outDir);
             }
 
             // Generar reporte
             ReportGenerator reportGenerator = new ReportGenerator();
-            String outPath = "reports/flight_report.pdf";
+            String outPath = outDir.resolve("flight_report.pdf").toString();
             reportGenerator.generatePdfReport(backingData, outPath);
 
             setStatus("PDF exported successfully: " + outPath);
+
         } catch (Exception e) {
             showError("Export failed", e.getMessage());
             setStatus("PDF export error.");
